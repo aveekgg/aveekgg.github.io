@@ -57,7 +57,6 @@ const skills = [
 export default function Home() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [mounted, setMounted] = useState(false);
-  const [showFullAbout, setShowFullAbout] = useState(false);
   const [currentView, setCurrentView] = useState('home'); // 'home', 'resume', 'projects', 'contact'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -74,17 +73,8 @@ export default function Home() {
   return (
     <div className="bg-cream-50 text-ink font-sans min-h-screen">
       {/* Updated Navbar - Template Style */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-cream-50 border-b border-cream-300">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          {/* Left side - Name and title */}
-          <button onClick={() => setCurrentView('home')} className="flex items-center gap-3 text-left">
-            <div className="w-4 h-4 bg-accent"></div>
-            <div>
-              <h1 className="text-xl font-serif font-semibold text-ink">Aveek G.</h1>
-              <p className="text-xs text-ink-light uppercase tracking-wide">PRODUCT MANAGER</p>
-            </div>
-          </button>
-          
+      <nav className="fixed top-0 left-0 right-0 z-50 h-20 bg-cream-50 border-b border-cream-300">
+        <div className="max-w-7xl mx-auto px-6 h-full flex justify-end items-center">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             <button 
@@ -126,7 +116,7 @@ export default function Home() {
 
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-cream-50 border-t border-cream-300">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-cream-50 border-t border-cream-300 shadow-lg">
             <div className="px-6 py-4 space-y-4">
               <button 
                 onClick={() => { setCurrentView('home'); setMobileMenuOpen(false); }}
@@ -158,7 +148,7 @@ export default function Home() {
       </nav>
 
       {/* Render different views based on currentView */}
-      {currentView === 'home' && <HomeView showFullAbout={showFullAbout} setShowFullAbout={setShowFullAbout} setCurrentView={setCurrentView} />}
+      {currentView === 'home' && <HomeView setCurrentView={setCurrentView} />}
       {currentView === 'resume' && <ResumeView />}
       {currentView === 'projects' && <ProjectsView selectedProject={selectedProject} setSelectedProject={setSelectedProject} />}
       {currentView === 'contact' && <ContactView />}
@@ -330,7 +320,7 @@ function DesktopProjectMobile({ selectedProject, setSelectedProject }) {
 }
 
 // Home View Component
-function HomeView({ showFullAbout, setShowFullAbout, setCurrentView }) {
+function HomeView({ setCurrentView }) {
   return (
     <div className="pt-20 min-h-screen flex">
       {/* Left Sidebar - Profile Section - Hidden on mobile */}
@@ -339,11 +329,13 @@ function HomeView({ showFullAbout, setShowFullAbout, setCurrentView }) {
           {/* Profile Image */}
           <div className="relative mb-8">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-400 rounded-full blur-lg opacity-25 scale-110"></div>
-            <img 
-              src="/image.jpg" 
-              alt="Aveek G." 
-              className="relative w-40 h-40 rounded-full object-cover border-4 border-white shadow-2xl"
-            />
+            <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+              <img
+                src="/image.jpeg"
+                alt="Aveek G."
+                className="w-full h-full object-cover scale-125"
+              />
+            </div>
           </div>
           
           {/* Name & Title */}
@@ -404,11 +396,13 @@ function HomeView({ showFullAbout, setShowFullAbout, setCurrentView }) {
           <div className="text-center">
             <div className="relative mb-6 inline-block">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-400 rounded-full blur-lg opacity-25 scale-110"></div>
-              <img 
-                src="/image.jpg" 
-                alt="Aveek G." 
-                className="relative w-32 h-32 rounded-full object-cover border-4 border-white shadow-2xl"
-              />
+              <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                <img
+                  src="/image.jpeg"
+                  alt="Aveek G."
+                  className="w-full h-full object-cover scale-125"
+                />
+              </div>
             </div>
             
             <h2 className="text-2xl font-serif font-semibold text-ink mb-2">
@@ -450,111 +444,82 @@ function HomeView({ showFullAbout, setShowFullAbout, setCurrentView }) {
               </p>
             </div>
 
-            {/* About Me - Condensed with Toggle */}
+            {/* About Me */}
             <div className="max-w-3xl">
-              <div className="mb-6">
-                <p className="text-ink-light leading-relaxed mb-4">
-                  Product Manager II at Nielsen, specializing in AI Systems, Internal Platforms, and Customer-Scale Efficiency.
-                  I've transitioned from Ocean Engineering to building AI-powered solutions at Amazon, Amber, and Nielsen,
-                  focusing on agentic workflows and conversational AI systems.
-                </p>
-                
-                {!showFullAbout && (
-                  <button 
-                    onClick={() => setShowFullAbout(true)}
-                    className="text-accent hover:text-accent-dark font-medium flex items-center gap-2 transition-colors"
-                  >
-                    Read More
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                )}
-              </div>
-
               {/* Expanded About Section */}
-              {showFullAbout && (
-                <div className="space-y-6 text-ink-light leading-relaxed animate-fadeIn">
+              <div className="space-y-6 text-ink-light leading-relaxed">
                   <div>
-                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-2">
-                      <span>🌊</span> From Ships to Startups
+                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-3">
+                      <span className="text-accent font-serif text-sm tracking-widest">01</span> From Ships to Startups
+                    </h3>
+                    <p>
+                      After graduating from IIT Kharagpur in Ocean Engineering & Naval Architecture, I spent four years designing marine propulsion systems. Over time, I realized I wanted to build products that evolved faster and touched more lives. That led me to pursue an MBA from IIM Bangalore in 2019 and make the jump to tech.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-3">
+                      <span className="text-accent font-serif text-sm tracking-widest">02</span> Amazon: Learning the Art of Balance
                     </h3>
                     <p className="mb-3">
-                      After graduating from IIT Kharagpur in Ocean Engineering & Naval Architecture, I spent 4 years designing marine propulsion systems. But over time, I realized I was losing interest in the work. I wanted to build products that evolved faster, touched more lives — and that led me to tech.
+                      My first stop in tech was Amazon's Workforce Intelligence team, planning staffing for middle-mile logistics.
+                    </p>
+                    <p className="mb-3">
+                      The role often felt like sitting between operations teams chasing SLAs and finance teams chasing budgets. Forecasts looked great—until a snowstorm somewhere in the U.S. made them useless overnight.
+                    </p>
+                    <p className="mb-3">
+                      I learnt that forecasting is part science, part art, and occasionally, part gut feel. More importantly, I learnt how to build trust, manage stakeholders, and make decisions with imperfect information.
                     </p>
                     <p>
-                      In 2019, I pursued an MBA from IIM Bangalore, with the intention of transitioning to the tech world.
+                      Somewhere along the way, I realized I wanted to build products.
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-2">
-                      <span>📦</span> Amazon: Scaling Logistics with Data
-                    </h3>
-                    <p>
-                      Post-MBA, I joined Amazon's Workforce Intelligence team, planning capacity for the middle-mile logistics division across 8 business teams. I built forecasting models and worked closely with operations and finance to plan short, medium, and long-term staffing — often managing peak headcount needs of over 2,000.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-2">
-                      <span>🏗️</span> Amber: Building from the Ground Up
+                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-3">
+                      <span className="text-accent font-serif text-sm tracking-widest">03</span> Amber: Learning Product the Startup Way
                     </h3>
                     <p className="mb-3">
-                      That opportunity came at Amber, where I joined as a Product Manager for the internal CRM platform — used by over 300 people across sales, customer support, reconciliation, and supply teams.
+                      Amber was my crash course in product management—the startup way.
                     </p>
-                    <div className="text-ink-light">
-                      <p className="mb-2">Over the last two years, I've worked across:</p>
-                      <ul className="list-disc list-inside space-y-1 ml-4 text-sm">
-                        <li>Designing backend-heavy workflow automations and access controls</li>
-                        <li>Crafting lead assignment algorithms, search ranking models, and referral/group booking flows</li>
-                        <li>Integrating communication tools like Sleekflow, Chatwoot, Postmark, Plivo, and AWS Chime</li>
-                        <li>Managing cross-tool syncs with 3rd-party CRMs like Zendesk and LeadSquared</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-2">
-                      <span>🤖</span> AI + Conversations at Amber
-                    </h3>
+                    <p className="mb-3">
+                      I built internal platforms used by sales, support, reconciliation, and supply teams. In a startup, "that's not my job" isn't really a thing, and I loved that.
+                    </p>
+                    <p className="mb-3">
+                      I spent my days obsessing over backend logic, hanging around engineers far more than PMs probably should, and in the process made some of my closest friends.
+                    </p>
+                    <p className="mb-3">
+                      Over three years, I worked on everything from CRM workflows and lead assignment systems to communication platforms and AI-powered conversational experiences.
+                    </p>
                     <p>
-                      For three years at Amber, I led the development of AI agents for sales and support. What I found most exciting was diving deep into historical chat data, identifying repeat query patterns, and brainstorming conversation flows with edge cases using LangGraph.
+                      Most importantly, I got to work with some incredibly smart people and had a lot of fun doing it.
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-2">
-                      <span>📡</span> Nielsen: Self-Install at Scale
+                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-3">
+                      <span className="text-accent font-serif text-sm tracking-widest">04</span> Nielsen: Operational Excellence at Scale
                     </h3>
+                    <p className="mb-3">
+                      Today, I'm a Product Manager II at Nielsen, building digital self-install experiences for households participating in audience measurement programs across the U.S.
+                    </p>
                     <p>
-                      Since October 2025, I've been a Product Manager II at Nielsen, building end-to-end self-install digital workflows for U.S. households empaneled in audience measurement programs — reducing installation friction and dependency on field operations.
+                      My focus is on making installation effortless for panelists while reducing operational complexity behind the scenes.
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-2">
-                      <span>🧠</span> How I Think
+                    <h3 className="text-lg font-semibold mb-3 text-ink flex items-center gap-3">
+                      <span className="text-accent font-serif text-sm tracking-widest">05</span> How I Think
                     </h3>
                     <div className="text-ink-light space-y-2">
-                      <p>• I've gotten comfortable with SQL, enjoy slicing and dicing data to get to real answers.</p>
-                      <p>• I love using GPT and Claude to brainstorm product ideas, debug flows, or just learn technical stuff.</p>
-                      <p>• I occasionally vibe-code mockups or product ideas for fun (a few are listed below 👇).</p>
-                      <p>• I value people who tell me what won't work — they sharpen my thinking more than those who say "yes."</p>
+                      <p>• I enjoy getting my hands dirty with SQL and digging through data.</p>
+                      <p>• GPT and Claude are usually open in a browser tab somewhere.</p>
+                      <p>• I occasionally vibe-code product ideas for fun.</p>
+                      <p>• I value people who tell me why something won't work—they sharpen my thinking the most.</p>
                     </div>
                   </div>
-
-                  <button 
-                    onClick={() => setShowFullAbout(false)}
-                    className="text-accent hover:text-accent-dark font-medium flex items-center gap-2 transition-colors"
-                  >
-                    Show Less
-                    <svg className="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </section>
